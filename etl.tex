@@ -176,6 +176,174 @@ it to the insurance provider. It does not interact with other
 operations, and it either succeeds or fails without the need
 to examine other data transfers.}
 
+\section{A checklist of requirements}
+
+As you are about to read through the list, many of the requirements
+are related to buying OTS software and the continuing support
+for it within the vendor's and your own organization. One argument
+for developing your own system is the large number of concerns
+that do not apply for in-house development. There is a broad
+discussion of this topic and the tradeoffs of each approach 
+in Chapter~\ref{chap:buildvbuy}.
+
+The use of a checklist prevents errors of omission, and errors
+of omission are the most common design gaffe with ETL systems. The
+following is a quick list, and it includes many topics that apply
+to any Tier 1 business system.
+
+\begin{description}
+\item[Business:] The type of business you are in affects many of
+the decisions you will make about an ETL system.
+
+\begin{enumerate}
+\item Costs, ranging across initial purchase, annual licensing, and
+TCO (Total Cost of Ownership).
+
+\item Regulatory constraints if you are in a highly regulated business.
+
+\item Auditing, including security and other IT-type audits.
+
+\end{enumerate}
+
+\item[Vendor stability:] Assuming you have decided to buy a system
+rather than build it, vendor stability is the most often overlooked 
+consideration. Many customers do not question a vendor's business stability
+although it is straightforward to gather much of the data.
+
+\begin{enumerate}
+\item Be alert to whether the vendor has sub-contractors of its own.
+This is an additional source of instability. Given the relative
+youth of OTS ETL software, outsourced development is more common
+than it is with more mature products.
+
+\item Financial records for public corporations are easy to obtain
+from authoritative sources. With private corporations, it is often
+possible to find out a few details about venture capital investments.
+Whether public or private, a telltale fact is how the revenue (or
+capital investment) is divided between sales, product development, 
+and product support. Is a vendor dependent on explosive growth
+to feed the coffers? If the product development expenditures are
+high, how will the company be able to support a larger, installed
+base?
+
+\item One important raw number is the number of years the company
+has been in business, and how old the product is (assuming it might
+have had a life prior to its current owners). If the company is 
+two years old, then there are very few people in any role who have
+more than two years of experience with \emph{this product}.
+
+\end{enumerate}
+
+\item[Level of Service:] This is an issue that is surprisingly
+separate from the financial stability of the vendor. Specifically,
+is the system is designed for data owners and their delegates to
+use, then the level of service required is high. If the users are
+to be IT professionals, then level of service for day-to-day operation
+can be low.
+
+\begin{enumerate}
+\item User support is a matter of issue tracking, and phone and
+email contacts. Many vendors use an issue tracking system as the
+one way to report and resolve problems. A careful review of the
+contract with the vendor may be required to suss this limitation.
+
+\item Technical support is of most interest to the employees in
+your IT department. As an example, most common problems with
+connectivity between systems are \emph{purely} technical. The
+solutions are not process related; they are definite and not matters
+of opinion. They do, however, require a technically astute person
+on each end of the conversation. It is a good idea to very that
+such people exist and are reachable within the vendor's business.
+
+\item Within ETL software, the vendor's plan for continuity of
+business is important. As the customer, each integration that can
+be interrupted affects the two systems that it connects.  If you
+ETL vendor goes out of business or lets you down, it is serious.
+
+\end{enumerate}
+
+
+\item[Implementation services:] Specifically, how do you get ``up
+and running'' with the ETL software.
+
+\begin{enumerate}
+\item A purely cloud-based system with nothing to install is 
+a fantasy that exists only in the minds of prospective customers
+up until they become real customers. All systems require some
+client installation even when there is nothing to install in the
+data center. Who is going to do the setup work?
+
+\item If you are building or buying an ETL system, it is a good
+bet that you already have integrations that must move to the new
+system. Are you on your own, and if not, who will help you?
+
+\item Whether you build or buy, the ETL product will change every
+few months. New features will be required to support new interfaces
+between systems, bugs will require fixes, and discoveries that are
+made by users will result in requests for changes to the user
+interface. Along with the mechanics of making these changes,
+there may be costs.
+
+\item Perhaps the most important conversation to have with the
+vendor or the user community is a discussion about realistic
+schedule. If possible, focus on past performance. Vendor claims
+that implementation time is being reduced tell you only one
+fact: implementation times are too long and must have a 
+few, related problems that have been headaches for other 
+customers.
+
+\end{enumerate}
+
+\item[Operational technology:] This topic is as large as it is often
+ignored.
+
+\begin{enumerate}
+\item 
+\end{enumerate}
+
+\item[The roles of the users:] Most products are either expert
+systems (anyone is able to use it) or systems for experts (a product
+to ease the working lives of the people who know what they are
+doing).
+
+\begin{enumerate}
+\item Is there a user community, and how active is it?
+
+\item How readable is the documentation? Has your user community
+looked at \emph{any} of it? Is there training? Is it useful? Who
+is the audience for the training?
+
+\item And there is the all important user interface. A great many
+products tell customers ``the only thing you need is a browser,''
+an almost fact-free statement from which nothing at all can be
+infered about the quality of the users' experiences. Here is a list
+of topics about the user interface that you should at least ask.
+It is not required for a product to support every bit of subject
+matter, but you should ask before you develop or buy.
+
+\begin{itemize}
+\item Historical information, both examination within the product
+and an interface to a data warehouse.
+
+\item Forensic information, both immediate and comparison with
+information in a data warehouse.
+
+\item Adding new integrations, retiring old ones, and the ability
+to modify an existing integration without interrupting possibly
+hundreds of others.
+
+\item Live monitoring. \emph{Real-time} is an overused phrase, and
+it is always an exaggeration. A more reasonable approach is to enter
+the requirements phase of your evaluation with some idea of whether
+being aware of the state of the ETL system five minutes ago is good
+enough. And if it is not good enough, what is?
+
+\end{itemize}
+
+\end{enumerate}
+
+
+\end{description}
 \section{Index cards}
 
 I first encountered the use of index cards as a project management
@@ -408,41 +576,11 @@ the interest of keeping the systems up-to-date.
 
 \subsection{Semantic success}
 
-\section{A requirements checklist}
-
-The use of a checklist prevents errors of omission, and errors
-of omission are the most common design gaffe with ETL systems. The
-following is a quick list, and it includes many topics that apply
-to any Tier 1 business system.
-
-\begin{description}
-\item[Business:] The type of business you are in affects many of
-the decisions you will make about an ETL system.
-
-\begin{enumerate}
-\item Costs, ranging across initial purchase, annual licensing, and
-TCO (Total Cost of Ownership).
-\item Regulatory constraints if you are in a highly regulated business.
-\item Auditing, including security and other IT-type audits.
-\end{enumerate}
-
-\item[Vendor stability:] Assuming you have decided to buy a system
-rather than build it, vendor stability is the most often overlooked 
-consideration. Many customers do not question a vendor's business stability
-although it is straightforward to gather much of the data.
-
-\begin{enumerate}
-\item Be alert to whether the vendor has sub-contractors of its own.
-This is an additional source of instability.
-
-\item Financial records for public corporations are easy to obtain
-from authoritative sources. 
-\end{enumerate}
-\end{description}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Build \emph{v}. Buy}
+\label{chap:buildvbuy}
 
 There is no complete ETL system.
 
