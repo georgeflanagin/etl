@@ -9,11 +9,10 @@
 \chapterstyle{madsen}
 
 %\SetWatermarkText{Work in Process}
-\SetWatermarkText{}
-%\SetWatermarkText{QAnon}
-\SetWatermarkFontSize{6cm}
+\SetWatermarkText{Copyright~2021~George~Flanagin}
+\SetWatermarkFontSize{1.5cm}
 \SetWatermarkAngle{55}
-\SetWatermarkColor[gray]{0.98}
+\SetWatermarkColor[gray]{0.90}
 
 \setlength{\parskip}{0.8em}
 \setlength{\parindent}{0.8em}
@@ -50,6 +49,7 @@ data integrations.
 \newpage
 \renewcommand\thelinenumber{\color{red}\arabic{linenumber}}
 \pagewiselinenumbers
+\switchlinenumbers*
 \modulolinenumbers[3]
 
 \frontmatter
@@ -92,7 +92,7 @@ as a plural noun, and this has allowed me to use \emph{datum} as
 the singular. My choice prevents endless uses of tiring phrases like
 \emph{piece of data}.
 
-Conversations about pronouns are all the rage in 2020 as I write
+Conversations about pronouns are all the rage in 2021 as I write
 the first edition of this pamphlet. I find that reading \emph{his
 or her} breaks the flow of the narrative, and the singular \emph{they}
 still sounds plural to many readers' ears. Regardless of concerns
@@ -132,18 +132,9 @@ ETL system,'' but something about the formality of the text
 put me off. Because an ETL system joins other systems, the 
 requirements are as much about the boundaries of the system as
 they are about what is \emph{in} the ETL system.
-
-Figure~\ref{fig:mindmap} is taken from the collective discussion
-at \UR that preceded all our decisions about formalizing and 
-choosing an ETL system. Many of the requirements are generic
+Many of the requirements are generic
 in the sense that your organizaiton will be considering them
 for every Tier 1 business system that you buy or build.
-
-\begin{figure}
-\includegraphics[width=0.95\textwidth]{mindmap.png}
-\caption{Mind-map of ETL requirements from \UR}
-\label{fig:mindmap}
-\end{figure}
 
 \section{Why do we need to design ETL systems?}
 
@@ -164,17 +155,18 @@ if all the ETL operations are self-similar and consistent, the
 desired result of following a policy.
 
 ETL systems have one very large scale property that constrains
-acceptable designs. Using the conventional and current vocabulary,
-let us call each element of the ETL system an \emph{integration}.\footnote{
-There is no universally accepted definition of a [data] integration.
-In this guide, I define an integration as something that can be
-launched and run separately from other integrations, and that 
-on its own can be said to succeed or fail. As an example, there
-might be a weekly integration that collects a list of employees
-who are paying for supplemental dental insurance, and transfers
-it to the insurance provider. It does not interact with other
-operations, and it either succeeds or fails without the need
-to examine other data transfers.}
+acceptable designs: they join other systems with each other, the
+ETL system serving as a hub. Using the conventional and current
+vocabulary, let us call each element of the ETL system an
+\emph{integration}.\footnote{There is no universally accepted
+definition of a [data] integration.  In this guide, I define an
+integration as something that can be launched and run separately
+from other integrations, and that on its own can be said to succeed
+or fail. As an example, there might be a weekly integration that
+collects a list of employees who are paying for supplemental dental
+insurance, and transfers it to the insurance provider. It does not
+interact with other operations, and it either succeeds or fails
+without the need to examine other data transfers.}
 
 \section{A checklist of requirements}
 
@@ -295,31 +287,89 @@ customers.
 \end{enumerate}
 
 \item[Operational technology:] This topic is as large as it is often
-ignored.
+ignored. Vendors are fond of summarizing the topic with phrases as
+short and meaningless as ``our technology stack is Java running on 
+Linux,'' or ``because our software is cloud based, we are OS agnostic.''
+I have personally read each of those claims in vendor literature.
 
 \begin{enumerate}
-\item 
+\item \emph{Security} is the watchword of the 2020s, and a careful
+review of the authentication and authorization processes is required.
+
+\item \emph{Authentication} is more often something that you, the
+customer, provide in another system because the strategies like
+Kerberos and Shibboleth are technically adequate for any realistic
+use.
+
+\item \emph{Authorization} is a critical part of any product. 
+Now that you are authenticated, what is your role? What are you allowed
+to do? Authorization is both complex and arbitrary, and there is
+a good argument to be made for trusting the users of an ETL 
+system: users of the ETL system can use any function within it.
+
+In cases where the organization is too large for this to be
+workable, or where regulatory compliance creates a need to separate
+job functions, you should consider a robust test-development 
+environment, and restricting access to the production 
+environment.
+
+\item \emph{Data security} refers to the safeguards that the
+ETL system provides for the data on which it operates. ETL
+software can be a security hole when its security is less than
+the security at the endpoints. This is the opposite of the 
+accusation that one is using an armored car to move money between
+park benches.
+
+\item All systems have constraints. Consider the trivial case
+that the system clock on the machine where the ETL system runs
+is assumed to be correctly synchronized with Internet time 
+servers. When considering building or buying an ETL system,
+make a list of all the environmental facts that are assumed.
+Often, the largest constraint is the assumption that a 
+significant data store (DBMS?) is available for use by the
+ETL software. If this database is located on other machines,
+then they must also be operational to carry out ETL operations.
+
+Other licenced products may be required, and there are sometimes
+requirements that specific versions of system libraries must
+be present, or that \emph{Tomcat} or \emph{ngnix} be the webserver
+software of choice. These restrictions are significant, and the
+point of rigorous requirements gathering is to ensure they 
+are not surprising. 
+
+\item ETL products are network-aware because they move data
+from place to place. The methods for navigating the network
+are important. To move data out of the organization, an ETL 
+product must interoperate with the organization's firewalls
+and network topology. When it comes to an argument about 
+the network, the firewall always wins, so the flexibility of the
+ETL system is \emph{important} variable.
+
 \end{enumerate}
 
-\item[The roles of the users:] Most products are either expert
-systems (anyone is able to use it) or systems for experts (a product
-to ease the working lives of the people who know what they are
-doing).
+\item[The roles of the users:] Most products are either \emph{expert
+systems}, anyone is assumed to be able to use it, or \emph{systems for
+experts}, a product to ease the working lives of the people who know
+what they are doing.
 
 \begin{enumerate}
-\item Is there a user community, and how active is it?
+\item Is there a user community, and how active is it? Some products
+have outsourced the knowledge supporting users to the user 
+community, a ``free'' subcontracting operation that contributes
+to the bottom line.
 
 \item How readable is the documentation? Has your user community
-looked at \emph{any} of it? Is there training? Is it useful? Who
-is the audience for the training?
+looked at \emph{any} of it? When is the last time it was updated?
+Is there training? Is it useful? Who is the audience for the training?
 
 \item And there is the all important user interface. A great many
 products tell customers ``the only thing you need is a browser,''
 an almost fact-free statement from which nothing at all can be
-infered about the quality of the users' experiences. Here is a list
-of topics about the user interface that you should at least ask.
-It is not required for a product to support every bit of subject
-matter, but you should ask before you develop or buy.
+infered about the quality of the users' experiences.  The following
+is a list of topics to consider regarding user interface design in
+ETL products.  It is not required for a product to support every
+element of subject matter, but you should know the answers before
+you develop or buy.
 
 \begin{itemize}
 \item Historical information, both examination within the product
@@ -385,7 +435,12 @@ The abstract names have a definite security advantage, as well. If
 you are loose of lip and having a glass of wine in a semi-public
 place, you are less likely to reveal specific information about
 company internals if you say unflattering things about Toast and
-Butter than if you refer to the product by its better known name.
+Butter than if you refer to the product by its brand name.
+
+For any of the above to work, the names must be consistently 
+employed to be enjoyed. If the names do not become and remain
+widely known and used, eventually vague terms like ``the check run''
+will take the place of ``single use account fund transfers.''
 
 \item[Type:] There will be more about this topic below. Important 
 factors in the type information are facts that are answers to questions
@@ -397,13 +452,14 @@ is ideally just enough for everyone who reads it to have the
 anything similar enough to be occasionally confused with it.
 
 \item[Owner:] Owner is not an ideal noun because it can be ambiguous.
-The owner of a subsystem is a \emph{person}, not a group of people,
+The owner of a subsystem is a \emph{person} (or at least a specific
+job title), not a group of people,
 who is the final arbitrator of whether or not the system is working
 as it should. Clearly, an owner must understand the \emph{purpose}
 of the subsystem to make this judgment, even if all the \emph{functions}
-are not understood.  \footnote{Purpose and function are used
+are not understood.\footnote{Purpose and function are used
 interchangeably by some writers.  Within this guide, they are not.
-A purpose serves an end goal, and a function is simply an action
+A purpose serves an end goal, and a function is an action
 of some kind. Asset management is a purpose, whereas producing a
 financial report of the assets is a function.}
 
@@ -420,33 +476,34 @@ owner.
 
 \emph{Endpoint} is the term we will use for the sources, destinations,
 and intermediate rest-stops for data as it moves through your
-enterprise.  Motion and transformation take place between the
-endpoints, and the key concept of an endpoint is that it very likely
-has some unique constraints that involve the format of your data.
+enterprise. Data that are in motion are moving between endpoints,
+and transformations of data take place between the endpoints. The
+key concept of an endpoint is that it very likely has unique
+constraints that involve the format of your data.
 
 It is essential to give your endpoints (and many other things)
 names, and each one should have at least one index card associated
 with it. Again, well known names prevent endless recurrences of
-phrases like ``the system over at the recreation center,'' and the
-resulting ambiguity about exactly what is in that system.
+phrases like ``the membership system over at the recreation center,''
+and the resulting ambiguity about exactly what is in that system.
 
 \section{Boundaries}
 
 Without well defined boundaries, your ETL system will not work at
 all. As the data move between endpoints, they cross over the boundary
 into the ETL system, and assuming they do not get lost, they again
-cross the boundary in the outward direction. 
+cross the boundary in the outward direction.
 
 You can draw the boundaries wherever it suits your business needs.
 At \UR, we made a collection of decisions about what was inside and
-outside of the ETL system. These specific decisions worked
-well for us; they might not be the right ones for you, but you
-must have a definition or two bad consequences will follow. 
-You may have duplicated effort within the ETL system, or you
-may find that you have falsely assumed which system will have the
-shown here are presented in Figure~\ref{fig:boundaries} only as an
-example to help you think through the process of defining the
-boundaries in your own systems and subsystems.
+outside of the ETL system. These specific decisions worked well for
+us; they might not be the right ones for you, but you must have a
+definition or two bad consequences will follow.  You may have
+duplicated effort within the ETL system, or you may find that you
+have falsely assumed which system will have the shown here are
+presented in Figure~\ref{fig:boundaries} only as an example to help
+you think through the process of defining the boundaries in your
+own systems and subsystems.
 
 \begin{figure}[ht]
 \begin{center}
